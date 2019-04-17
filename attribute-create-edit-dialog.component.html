@@ -1,0 +1,79 @@
+<div class="card">
+  <div class="card-header card-header-bwi-blue">
+    <h4 class="card-title" *ngIf="!attributeId">
+      <i class="material-icons"> add </i> Create Attribute
+    </h4>
+    <h4 class="card-title" *ngIf="attributeId">
+      <i class="material-icons"> edit </i> Edit Attribute
+    </h4>
+    <p class="card-category"></p>
+  </div>
+  <div class="card-body">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        required
+        placeholder="Name"
+        name="name"
+        [(ngModel)]="name"
+        spellcheck="false"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Function name"
+        [(ngModel)]="functionName"
+        spellcheck="false"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Template</mat-label>
+      <mat-select required [(ngModel)]="templateId">
+        <mat-option *ngFor="let template of (templates | async)" [value]="template.id">{{
+          template.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="example-chip-list">
+      <mat-chip-list #chipList>
+        <mat-chip
+          *ngFor="let fruit of fruits"
+          [selectable]="selectable"
+          [removable]="removable"
+          [class]="fruit.color"
+          (removed)="remove(fruit)">
+          {{fruit.name}}
+        </mat-chip>
+        <input
+          placeholder="Type function"
+          #fruitInput
+          [formControl]="fruitCtrl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit.name">
+          {{fruit.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="card-footer">
+    <button
+      mat-raised-button
+      class="btn btn-bwi-blue"
+      [disabled]="!isFormValid()"
+      (click)="submit()"
+      type="submit"
+    >
+      Save
+    </button>
+    <button mat-raised-button mat-dialog-close class="btn">Cancel</button>
+  </div>
+</div>
